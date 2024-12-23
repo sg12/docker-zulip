@@ -85,7 +85,7 @@ services:
       SETTING_ZULIP_ADMINISTRATOR: "tor2next@yandex.ru"
       SETTING_EMAIL_HOST: "smtp.beget.com" # e.g. smtp.example.com
       SETTING_EMAIL_HOST_USER: "mail@rm-svz.ru"
-      SETTING_EMAIL_PORT: "2525"
+      SETTING_EMAIL_PORT: "465"
       ## It seems that the email server needs to use ssl or tls and can't be used without it
       SETTING_EMAIL_USE_SSL: "True"
       SETTING_EMAIL_USE_TLS: "False"
