@@ -8,7 +8,7 @@ services:
       ## Note that you need to do a manual `ALTER ROLE` query if you
       ## change this on a system after booting the postgres container
       ## the first time on a host.  Instructions are available in README.md.
-      POSTGRES_PASSWORD: "REPLACE_WITH_SECURE_POSTGRES_PASSWORD"
+      POSTGRES_PASSWORD: "Postgres_12345"
     volumes:
       - "postgresql-14:/var/lib/postgresql/data:rw"
   memcached:
@@ -25,13 +25,13 @@ services:
     environment:
       SASL_CONF_PATH: "/home/memcache/memcached.conf"
       MEMCACHED_SASL_PWDB: "/home/memcache/memcached-sasl-db"
-      MEMCACHED_PASSWORD: "REPLACE_WITH_SECURE_MEMCACHED_PASSWORD"
+      MEMCACHED_PASSWORD: "Mem_12345"
   rabbitmq:
     image: "rabbitmq:3.12.14"
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: "zulip"
-      RABBITMQ_DEFAULT_PASS: "REPLACE_WITH_SECURE_RABBITMQ_PASSWORD"
+      RABBITMQ_DEFAULT_PASS: "Rebbit_12345"
     volumes:
       - "rabbitmq:/var/lib/rabbitmq:rw"
   redis:
@@ -44,7 +44,7 @@ services:
         echo "requirepass '$$REDIS_PASSWORD'" > /etc/redis.conf
         exec redis-server /etc/redis.conf
     environment:
-      REDIS_PASSWORD: "REPLACE_WITH_SECURE_REDIS_PASSWORD"
+      REDIS_PASSWORD: "Redis_12345"
     volumes:
       - "redis:/data:rw"
   zulip:
@@ -54,7 +54,7 @@ services:
       context: .
       args:
         ## Change these if you want to build zulip from a different repo/branch
-        ZULIP_GIT_URL: https://github.com/zulip/zulip.git
+        ZULIP_GIT_URL: https://github.com/sg12/zulip
         ZULIP_GIT_REF: "9.3"
         ## Set this up if you plan to use your own CA certificate bundle for building
         # CUSTOM_CA_CERTIFICATES:
@@ -72,18 +72,18 @@ services:
       SETTING_MEMCACHED_LOCATION: "memcached:11211"
       SETTING_RABBITMQ_HOST: "rabbitmq"
       SETTING_REDIS_HOST: "redis"
-      SECRETS_email_password: "123456789"
+      SECRETS_email_password: "Mail_123456789"
       ## These should match RABBITMQ_DEFAULT_PASS, POSTGRES_PASSWORD,
       ## MEMCACHED_PASSWORD, and REDIS_PASSWORD above.
-      SECRETS_rabbitmq_password: "REPLACE_WITH_SECURE_RABBITMQ_PASSWORD"
-      SECRETS_postgres_password: "REPLACE_WITH_SECURE_POSTGRES_PASSWORD"
-      SECRETS_memcached_password: "REPLACE_WITH_SECURE_MEMCACHED_PASSWORD"
-      SECRETS_redis_password: "REPLACE_WITH_SECURE_REDIS_PASSWORD"
-      SECRETS_secret_key: "REPLACE_WITH_SECURE_SECRET_KEY"
-      SETTING_EXTERNAL_HOST: "localhost.localdomain"
-      SETTING_ZULIP_ADMINISTRATOR: "admin@example.com"
-      SETTING_EMAIL_HOST: "" # e.g. smtp.example.com
-      SETTING_EMAIL_HOST_USER: "noreply@example.com"
+      SECRETS_rabbitmq_password: "Rebbit_12345"
+      SECRETS_postgres_password: "Postgres_12345"
+      SECRETS_memcached_password: "Mem_12345"
+      SECRETS_redis_password: "Redis_12345"
+      SECRETS_secret_key: "Zulip_myKey_12345"
+      SETTING_EXTERNAL_HOST: "89.111.137.56"
+      SETTING_ZULIP_ADMINISTRATOR: "tor2next@yandex.ru"
+      SETTING_EMAIL_HOST: "mail.rm-svz.ru" # e.g. smtp.example.com
+      SETTING_EMAIL_HOST_USER: "tor2next@yandex.ru"
       SETTING_EMAIL_PORT: "587"
       ## It seems that the email server needs to use ssl or tls and can't be used without it
       SETTING_EMAIL_USE_SSL: "False"
