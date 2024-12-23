@@ -90,6 +90,7 @@ services:
       SETTING_EMAIL_USE_SSL: "True"
       SETTING_EMAIL_USE_TLS: "False"
       ZULIP_AUTH_BACKENDS: "EmailAuthBackend"
+      - ADD_TOKENS_TO_NOREPLY_ADDRESS=False
       ## Uncomment this when configuring the mobile push notifications service
       # SETTING_ZULIP_SERVICE_PUSH_NOTIFICATIONS: "True"
       # SETTING_ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS: "True"
