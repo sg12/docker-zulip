@@ -118,6 +118,7 @@ services:
       # SETTINGS_S3_REGION: "None"
     volumes:
       - "zulip:/data:rw"
+      - /root/zulip-source/zulip:/home/zulip/deployments/2024-12-24-10-16-41
     ulimits:
       nofile:
         soft: 1000000
