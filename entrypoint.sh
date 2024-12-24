@@ -458,19 +458,7 @@ appRun() {
     exec supervisord -n -c "/etc/supervisor/supervisord.conf"
 }
 appInit() {
-    echo "=== Running initial setup ==="
-
-    # Выполняем обновление репозитория
-    if [ -d "/home/zulip/deployments/current/.git" ]; then
-        echo "Updating Zulip repository..."
-        cd /home/zulip/deployments/current
-        git reset --hard  # Сбрасываем любые изменения
-        git pull || echo "Failed to update repository. Continuing with existing code."
-        cd - > /dev/null
-    else
-        echo "Zulip repository not found. Skipping git pull."
-    fi
-    
+    echo "=== Running initial setup ==="    
     initialConfiguration
     bootstrappingEnvironment
 }
