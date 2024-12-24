@@ -117,6 +117,7 @@ services:
       # SETTINGS_S3_ENDPOINT_URL: "None"
       # SETTINGS_S3_REGION: "None"
     volumes:
+      - /root/zulip-source:/home/zulip/zulip
       - "zulip:/data:rw"
     ulimits:
       nofile:
