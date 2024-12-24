@@ -34,7 +34,8 @@ ARG ZULIP_GIT_REF=9.3
 # ARG CACHE_BUSTER=1
 # RUN git pull origin main
 
-WORKDIR /home/zulip/zulip
+# WORKDIR /home/zulip/zulip
+WORKDIR /root/zulip-source
 
 ARG CUSTOM_CA_CERTIFICATES
 
