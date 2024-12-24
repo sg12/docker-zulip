@@ -22,39 +22,24 @@ FROM base AS build
 RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER zulip
-# WORKDIR /home/zulip
+WORKDIR /home/zulip
 
 # You can specify these in docker-compose.yml or with
 #   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
 ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
 ARG ZULIP_GIT_REF=9.3
 
-# RUN git clone "$ZULIP_GIT_URL"
+RUN git clone "$ZULIP_GIT_URL"
 
-# ARG CACHE_BUSTER=1
-# RUN git pull origin main
-
-# WORKDIR /home/zulip/zulip
+WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
 
-WORKDIR /root/zulip-source
-
-RUN set -x && \
-    ls -lh ./tools/provision && \
-    chmod +x ./tools/provision && \
-    SKIP_VENV_SHELL_WARNING=1 bash ./tools/provision --build-release-tarball-only
-
+# Finally, we provision the development environment and build a release tarball
+RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
 RUN . /srv/zulip-py3-venv/bin/activate && \
     ./tools/build-release-tarball docker && \
     mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
-
-# Finally, we provision the development environment and build a release tarball
-# RUN set -x && \ 
-#    SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
-# RUN . /srv/zulip-py3-venv/bin/activate && \
-#    ./tools/build-release-tarball docker && \
-#    mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
 
 
 # In the second stage, we build the production image from the release tarball
