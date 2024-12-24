@@ -35,16 +35,26 @@ ARG ZULIP_GIT_REF=9.3
 # RUN git pull origin main
 
 # WORKDIR /home/zulip/zulip
-WORKDIR /root/zulip-source
 
 ARG CUSTOM_CA_CERTIFICATES
 
-# Finally, we provision the development environment and build a release tarball
-RUN set -x && \ 
-    SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
+WORKDIR /root/zulip-source
+
+RUN set -x && \
+    ls -lh ./tools/provision && \
+    chmod +x ./tools/provision && \
+    SKIP_VENV_SHELL_WARNING=1 bash ./tools/provision --build-release-tarball-only
+
 RUN . /srv/zulip-py3-venv/bin/activate && \
     ./tools/build-release-tarball docker && \
     mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
+
+# Finally, we provision the development environment and build a release tarball
+# RUN set -x && \ 
+#    SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
+# RUN . /srv/zulip-py3-venv/bin/activate && \
+#    ./tools/build-release-tarball docker && \
+#    mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
 
 
 # In the second stage, we build the production image from the release tarball
