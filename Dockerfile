@@ -31,8 +31,8 @@ ARG ZULIP_GIT_REF=9.3
 
 RUN git clone "$ZULIP_GIT_URL"
 
-RUN echo "Force cache busting $(date)" && \
-    git pull origin main
+ARG CACHE_BUSTER=1
+RUN git pull origin main
 
 WORKDIR /home/zulip/zulip
 
