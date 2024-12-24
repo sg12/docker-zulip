@@ -82,13 +82,13 @@ services:
       SECRETS_redis_password: "Redis_12345"
       SECRETS_secret_key: "Zulip_myKey_12345"
       SETTING_EXTERNAL_HOST: "89.111.137.56"
-      SETTING_ZULIP_ADMINISTRATOR: "tor2next@yandex.ru"
+      SETTING_ZULIP_ADMINISTRATOR: "mail@rm-svz.ru"
       SETTING_EMAIL_HOST: "smtp.beget.com" # e.g. smtp.example.com
       SETTING_EMAIL_HOST_USER: "mail@rm-svz.ru"
-      SETTING_EMAIL_PORT: "465"
+      SETTING_EMAIL_PORT: "2525"
       SETTING_EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
       ## It seems that the email server needs to use ssl or tls and can't be used without it
-      SETTING_EMAIL_USE_SSL: "True"
+      ## SETTING_EMAIL_USE_SSL: "True"
       SETTING_EMAIL_USE_TLS: "False"
       ZULIP_AUTH_BACKENDS: "EmailAuthBackend"
       ADD_TOKENS_TO_NOREPLY_ADDRESS: "False"
