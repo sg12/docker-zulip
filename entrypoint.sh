@@ -450,6 +450,16 @@ bootstrappingEnvironment() {
 # END appRun functions
 # BEGIN app functions
 appRun() {
+    initialConfiguration
+    bootstrappingEnvironment
+    echo "=== Begin Run Phase ==="
+    echo "Starting Zulip using supervisor with \"/etc/supervisor/supervisord.conf\" config ..."
+    echo ""
+    exec supervisord -n -c "/etc/supervisor/supervisord.conf"
+}
+appInit() {
+    echo "=== Running initial setup ==="
+
     # Выполняем обновление репозитория
     if [ -d "/home/zulip/deployments/current/.git" ]; then
         echo "Updating Zulip repository..."
@@ -460,16 +470,7 @@ appRun() {
     else
         echo "Zulip repository not found. Skipping git pull."
     fi
-
-    initialConfiguration
-    bootstrappingEnvironment
-    echo "=== Begin Run Phase ==="
-    echo "Starting Zulip using supervisor with \"/etc/supervisor/supervisord.conf\" config ..."
-    echo ""
-    exec supervisord -n -c "/etc/supervisor/supervisord.conf"
-}
-appInit() {
-    echo "=== Running initial setup ==="
+    
     initialConfiguration
     bootstrappingEnvironment
 }
