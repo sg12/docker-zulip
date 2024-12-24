@@ -450,6 +450,17 @@ bootstrappingEnvironment() {
 # END appRun functions
 # BEGIN app functions
 appRun() {
+    # Выполняем обновление репозитория
+    if [ -d "/home/zulip/deployments/current/.git" ]; then
+        echo "Updating Zulip repository..."
+        cd /home/zulip/deployments/current
+        git reset --hard  # Сбрасываем любые изменения
+        git pull || echo "Failed to update repository. Continuing with existing code."
+        cd - > /dev/null
+    else
+        echo "Zulip repository not found. Skipping git pull."
+    fi
+
     initialConfiguration
     bootstrappingEnvironment
     echo "=== Begin Run Phase ==="
