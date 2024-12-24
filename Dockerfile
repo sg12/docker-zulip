@@ -39,10 +39,11 @@ WORKDIR /home/zulip/zulip
 ARG CUSTOM_CA_CERTIFICATES
 
 # Finally, we provision the development environment and build a release tarball
-# RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
-# RUN . /srv/zulip-py3-venv/bin/activate && \
-#    ./tools/build-release-tarball docker && \
-#    mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
+RUN set -x && \ 
+    SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
+RUN . /srv/zulip-py3-venv/bin/activate && \
+    ./tools/build-release-tarball docker && \
+    mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
 
 
 # In the second stage, we build the production image from the release tarball
