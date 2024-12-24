@@ -29,15 +29,9 @@ WORKDIR /home/zulip
 ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
 ARG ZULIP_GIT_REF=9.3
 
-RUN CURRENT_DIR=$(pwd) && \
-    if [ -d "/home/zulip/zulip" ]; then \
-        echo "Directory exists, pulling updates"; \
-        cd /home/zulip/zulip && git reset --hard && git pull origin main; \
-    else \
-        echo "Cloning repository"; \
-        git clone --branch main "$ZULIP_GIT_URL" /home/zulip/zulip; \
-    fi && \
-    cd "$CURRENT_DIR"
+RUN git clone "$ZULIP_GIT_URL" && \
+    cd zulip && \
+    git checkout -b current "$ZULIP_GIT_REF"
 
 WORKDIR /home/zulip/zulip
 
