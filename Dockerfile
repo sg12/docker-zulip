@@ -29,10 +29,10 @@ WORKDIR /home/zulip
 ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
 ARG ZULIP_GIT_REF=9.3
 
-RUN git clone "$ZULIP_GIT_URL"
+# RUN git clone "$ZULIP_GIT_URL"
 
-ARG CACHE_BUSTER=1
-RUN git pull origin main
+# ARG CACHE_BUSTER=1
+# RUN git pull origin main
 
 WORKDIR /home/zulip/zulip
 
