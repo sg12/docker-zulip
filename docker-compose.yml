@@ -69,7 +69,7 @@ services:
       DB_HOST: "database"
       DB_HOST_PORT: "5432"
       DB_USER: "zulip"
-      SSL_CERTIFICATE_GENERATION: "lets-encrypt"
+      SSL_CERTIFICATE_GENERATION: "manual"
       SETTING_MEMCACHED_LOCATION: "memcached:11211"
       SETTING_RABBITMQ_HOST: "rabbitmq"
       SETTING_REDIS_HOST: "redis"
@@ -120,6 +120,8 @@ services:
       # SETTINGS_S3_REGION: "None"
     volumes:
       - "zulip:/data:rw"
+      - "/etc/letsencrypt/live/connectrm-svz.ru/fullchain.pem:/etc/ssl/certs/zulip-cert.pem:ro"
+      - "/etc/letsencrypt/live/connectrm-svz.ru/privkey.pem:/etc/ssl/private/zulip-key.pem:ro"
     ulimits:
       nofile:
         soft: 1000000
