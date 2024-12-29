@@ -60,7 +60,7 @@ services:
         ## Set this up if you plan to use your own CA certificate bundle for building
         # CUSTOM_CA_CERTIFICATES:
     ports:
-      - "8080:80"
+      - "80:80"
       - "443:443"
     environment:
       ## See https://github.com/zulip/docker-zulip#configuration for
