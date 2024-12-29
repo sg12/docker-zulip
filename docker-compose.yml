@@ -124,6 +124,16 @@ services:
       nofile:
         soft: 1000000
         hard: 1048576
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - zulip
+      
 volumes:
   zulip:
   postgresql-14:
