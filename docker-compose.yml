@@ -91,7 +91,7 @@ services:
       ## It seems that the email server needs to use ssl or tls and can't be used without it
       ## SETTING_EMAIL_USE_SSL: "True"
       SETTING_EMAIL_USE_TLS: "False"
-      SETTING_ALLOWED_HOSTS: "connectrm-svz.ru"
+      SETTING_ALLOWED_HOSTS: ["connectrm-svz.ru"]
       ZULIP_AUTH_BACKENDS: "EmailAuthBackend"
       ADD_TOKENS_TO_NOREPLY_ADDRESS: "False"
       NOREPLY_EMAIL_ADDRESS: "mail@rm-svz.ru"
