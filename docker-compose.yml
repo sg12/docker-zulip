@@ -120,8 +120,8 @@ services:
       # SETTINGS_S3_REGION: "None"
     volumes:
       - "zulip:/data:rw"
-      - /opt/zulip-ssl:/etc/letsencrypt/live/connectrm-svz.ru:rw
-      - /opt/zulip-nginx:/etc/nginx/sites-available:rw
+      - /opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro
+      - /opt/zulip-ssl/privkey.pem:/etc/ssl/private/zulip.key:ro
     ulimits:
       nofile:
         soft: 1000000
