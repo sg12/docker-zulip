@@ -124,6 +124,13 @@ nginxConfiguration() {
     sed -i "s/worker_processes .*/worker_processes $NGINX_WORKERS;/g" /etc/nginx/nginx.conf
     sed -i "s/client_max_body_size .*/client_max_body_size $NGINX_MAX_UPLOAD_SIZE;/g" /etc/nginx/nginx.conf
     sed -i "s/proxy_buffering .*/proxy_buffering $NGINX_PROXY_BUFFERING;/g" /etc/nginx/zulip-include/proxy_longpolling
+
+    sed -i '/^http {/a \
+    \    add_header Access-Control-Allow-Origin *;\
+    \    add_header Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE";\
+    \    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range";\
+    \    add_header Access-Control-Expose-Headers "Content-Length,Content-Range";' /etc/nginx/nginx.conf
+    
     echo "Nginx configuration succeeded."
 }
 puppetConfiguration() {
