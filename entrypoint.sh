@@ -200,8 +200,8 @@ configureCerts() {
         echo "Consider setting SSL_CERTIFICATE_GENERATION in the environment to auto-generate"
         exit 1
     fi
-    ln -sfT "$DATA_DIR/certs/zulip.key" /etc/ssl/private/zulip.key
-    ln -sfT "$DATA_DIR/certs/zulip.combined-chain.crt" /etc/ssl/certs/zulip.combined-chain.crt
+    # ln -sfT "$DATA_DIR/certs/zulip.key" /etc/ssl/private/zulip.key
+    # ln -sfT "$DATA_DIR/certs/zulip.combined-chain.crt" /etc/ssl/certs/zulip.combined-chain.crt
     echo "Certificates configuration succeeded."
 }
 secretsConfiguration() {
