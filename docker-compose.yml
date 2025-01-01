@@ -95,6 +95,8 @@ services:
       ZULIP_AUTH_BACKENDS: "EmailAuthBackend"
       ADD_TOKENS_TO_NOREPLY_ADDRESS: "False"
       NOREPLY_EMAIL_ADDRESS: "mail@rm-svz.ru"
+      ZULIP_SSL_CERTIFICATE: "/etc/ssl/certs/zulip.combined-chain.crt"
+      ZULIP_SSL_KEY: "/etc/ssl/private/zulip.key"
       ## Uncomment this when configuring the mobile push notifications service
       # SETTING_ZULIP_SERVICE_PUSH_NOTIFICATIONS: "True"
       # SETTING_ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS: "True"
