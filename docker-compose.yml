@@ -124,8 +124,8 @@ services:
       - "zulip:/data:rw"
       - /opt/zulip-ssl/fullchain.pem:/data/certs/zulip.combined-chain.crt:ro
       - /opt/zulip-ssl/privkey.pem:/data/certs/zulip.key:ro
-      - /opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro
-      - /opt/zulip-ssl/privkey.pem:/etc/ssl/private/zulip.key:ro
+      #- /opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro
+      #- /opt/zulip-ssl/privkey.pem:/etc/ssl/private/zulip.key:ro
     ulimits:
       nofile:
         soft: 1000000
