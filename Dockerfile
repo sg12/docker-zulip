@@ -28,8 +28,12 @@ WORKDIR /home/zulip
 #   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
 ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
 ARG ZULIP_GIT_REF=9.3
+ARG ZULIP_GIT_REF=develop
 
-RUN git clone "$ZULIP_GIT_URL"
+#RUN git clone "$ZULIP_GIT_URL"
+RUN git clone "$ZULIP_GIT_URL" /zulip && \
+    cd /zulip && \
+    git checkout "$ZULIP_GIT_REF"
 
 WORKDIR /home/zulip/zulip
 
