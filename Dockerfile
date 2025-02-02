@@ -17,6 +17,8 @@ RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
     useradd -d /home/zulip -m zulip -u 1000
 
+RUN corepack prepare pnpm@9.14.2 --activate #1---
+
 FROM base AS build
 
 RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
@@ -35,6 +37,10 @@ RUN git clone "$ZULIP_GIT_URL"
 WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
+
+RUN corepack prepare pnpm@9.14.2 --activate #2---
+
+RUN pnpm install --frozen-lockfile --prefer-offline #3---
 
 # Finally, we provision the development environment and build a release tarball
 RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
