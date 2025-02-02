@@ -13,9 +13,21 @@ RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
-    apt-get -q install --no-install-recommends -y ca-certificates git locales python3 sudo tzdata && \
+    apt-get -q install --no-install-recommends -y \
+    ca-certificates git locales python3 sudo tzdata \
+    curl nodejs npm && \
+    npm install -g corepack && \
+    corepack enable && \
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
     useradd -d /home/zulip -m zulip -u 1000
+
+#RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/ubuntu/\? |$UBUNTU_MIRROR |" /etc/apt/sources.list; } && \
+#    apt-get -q update && \
+#    apt-get -q dist-upgrade -y && \
+#    DEBIAN_FRONTEND=noninteractive \
+#    apt-get -q install --no-install-recommends -y ca-certificates git locales python3 sudo tzdata && \
+#    touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
+#    useradd -d /home/zulip -m zulip -u 1000
 
 RUN corepack prepare pnpm@9.14.2 --activate #1---
 
