@@ -13,9 +13,15 @@ RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
-    apt-get -q install --no-install-recommends -y ca-certificates git locales python3 sudo tzdata && \
+    apt-get -q install --no-install-recommends -y \
+    ca-certificates git locales python3 sudo tzdata \
+    curl nodejs npm && \
+    npm install -g corepack && \
+    corepack enable && \
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
     useradd -d /home/zulip -m zulip -u 1000
+
+RUN corepack prepare pnpm@9.14.2 --activate
 
 FROM base AS build
 
@@ -34,6 +40,10 @@ RUN git clone "$ZULIP_GIT_URL"
 WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
+
+RUN corepack prepare pnpm@9.14.2 --activate
+
+RUN pnpm install --frozen-lockfile --prefer-offline
 
 # Finally, we provision the development environment and build a release tarball
 RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
