@@ -30,8 +30,9 @@ RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER zulip
 WORKDIR /home/zulip
 
-USER root
-RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /home/zulip/zulip
+#USER root
+#RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /home/zulip/zulip
+RUN git clone --branch main https://github.com/sg12/zulip.git
 
 # You can specify these in docker-compose.yml or with
 #   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
@@ -39,7 +40,7 @@ RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /h
 #ARG ZULIP_GIT_REF=9.3
 
 #RUN git clone "$ZULIP_GIT_URL"
-USER zulip
+#USER zulip
 WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
