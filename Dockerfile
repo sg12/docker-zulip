@@ -31,7 +31,7 @@ USER zulip
 WORKDIR /home/zulip
 
 USER root
-RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /zulip
+RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /home/zulip/zulip
 
 # You can specify these in docker-compose.yml or with
 #   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
