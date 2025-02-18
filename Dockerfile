@@ -30,7 +30,7 @@ RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER zulip
 WORKDIR /home/zulip
 
-
+USER root
 RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /zulip
 
 # You can specify these in docker-compose.yml or with
