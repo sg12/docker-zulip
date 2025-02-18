@@ -31,10 +31,7 @@ USER zulip
 WORKDIR /home/zulip
 
 
-ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
-ARG ZULIP_GIT_REF=main  # Указываем, что нужно использовать ветку main
-
-RUN git clone --branch "$ZULIP_GIT_REF" --single-branch "$ZULIP_GIT_URL" /zulip
+RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /zulip
 
 # You can specify these in docker-compose.yml or with
 #   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
