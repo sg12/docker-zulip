@@ -39,7 +39,7 @@ RUN git clone --branch main --single-branch https://github.com/sg12/zulip.git /z
 #ARG ZULIP_GIT_REF=9.3
 
 #RUN git clone "$ZULIP_GIT_URL"
-
+USER zulip
 WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
