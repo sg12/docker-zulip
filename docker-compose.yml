@@ -104,4 +104,4 @@ volumes:
   zulip:
   postgresql-14:
   rabbitmq:
-
+  redis:
