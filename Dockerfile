@@ -44,7 +44,9 @@ ARG ZULIP_GIT_URL=https://github.com/sg12/connectRM.git
 ARG ZULIP_GIT_REF=9.3
 ARG ZULIP_GIT_REF=develop
 
-RUN git clone "$ZULIP_GIT_URL"
+# RUN git clone "$ZULIP_GIT_URL"
+RUN git clone "$ZULIP_GIT_URL" zulip
+
 
 WORKDIR /home/zulip/zulip
 
