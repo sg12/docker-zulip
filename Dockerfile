@@ -56,6 +56,8 @@ RUN corepack prepare pnpm@9.14.2 --activate #2---
 
 RUN pnpm install --frozen-lockfile --prefer-offline #3---
 
+RUN rm -rf node_modules/.cache
+
 # Finally, we provision the development environment and build a release tarball
 RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
 
