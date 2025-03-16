@@ -54,9 +54,6 @@ services:
     restart: unless-stopped
     build:
       context: .
-      args:
-        ZULIP_GIT_URL: https://github.com/sg12/connectRM.git
-        ZULIP_GIT_REF: develop
     ports:
       - "80:80"
       - "443:443"
