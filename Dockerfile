@@ -15,7 +15,7 @@ RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/
     DEBIAN_FRONTEND=noninteractive \
     apt-get -q install --no-install-recommends -y \
     ca-certificates git locales python3 sudo tzdata \
-    curl nodejs npm && \
+    curl nodejs npm openssh-client && \
     npm install -g corepack && \
     corepack enable && \
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
