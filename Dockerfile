@@ -38,9 +38,8 @@ COPY id_ed25519 /home/zulip/.ssh/id_ed25519
 RUN mkdir -p /home/zulip/.ssh && \
     chmod 700 /home/zulip/.ssh && \
     chmod 600 /home/zulip/.ssh/id_ed25519 && \
-    ssh-keyscan github.com >> /home/zulip/.ssh/known_hosts && \
     chown -R zulip:zulip /home/zulip/.ssh && \
-    git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
+    GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
 
 # Переключаемся на пользователя zulip
 USER zulip
