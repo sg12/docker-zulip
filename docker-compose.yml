@@ -50,18 +50,40 @@ services:
     restart: unless-stopped
     build:
       context: .
-      args:
-        ZULIP_GIT_URL: https://github.com/sg12/zulip
-        ZULIP_GIT_REF: "9.3"
     ports:
       - "80:80"
       - "443:443"
     environment:
-      # ... (остальные переменные окружения)
+      DB_HOST: ${DB_HOST}
+      DB_HOST_PORT: ${DB_HOST_PORT}
+      DB_USER: ${DB_USER}
+      SSL_CERTIFICATE_GENERATION: ${SSL_CERTIFICATE_GENERATION}
+      SETTING_MEMCACHED_LOCATION: ${SETTING_MEMCACHED_LOCATION}
+      SETTING_RABBITMQ_HOST: ${SETTING_RABBITMQ_HOST}
+      SETTING_REDIS_HOST: ${SETTING_REDIS_HOST}
+      SECRETS_email_password: ${SECRETS_email_password}
+      SECRETS_rabbitmq_password: ${SECRETS_rabbitmq_password}
+      SECRETS_postgres_password: ${SECRETS_postgres_password}
+      SECRETS_memcached_password: ${SECRETS_memcached_password}
+      SECRETS_redis_password: ${SECRETS_redis_password}
+      SECRETS_secret_key: ${SECRETS_secret_key}
+      SETTING_EXTERNAL_HOST: ${SETTING_EXTERNAL_HOST}
+      SETTING_ZULIP_ADMINISTRATOR: ${SETTING_ZULIP_ADMINISTRATOR}
+      SETTING_EMAIL_HOST: ${SETTING_EMAIL_HOST}
+      SETTING_EMAIL_HOST_USER: ${SETTING_EMAIL_HOST_USER}
+      SETTING_EMAIL_PORT: ${SETTING_EMAIL_PORT}
+      SETTING_EMAIL_HOST_PASSWORD: ${SETTING_EMAIL_HOST_PASSWORD}
+      SETTING_EMAIL_USE_TLS: ${SETTING_EMAIL_USE_TLS}
+      SETTING_ALLOWED_HOSTS: ${SETTING_ALLOWED_HOSTS}
+      ZULIP_AUTH_BACKENDS: ${ZULIP_AUTH_BACKENDS}
+      ADD_TOKENS_TO_NOREPLY_ADDRESS: ${ADD_TOKENS_TO_NOREPLY_ADDRESS}
+      NOREPLY_EMAIL_ADDRESS: ${NOREPLY_EMAIL_ADDRESS}
+      ZULIP_SSL_CERTIFICATE: ${ZULIP_SSL_CERTIFICATE}
+      ZULIP_SSL_KEY: ${ZULIP_SSL_KEY}
     volumes:
       - "zulip:/data:rw"
-      - /opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro
-      - /opt/zulip-ssl/privkey.pem:/etc/ssl/private/zulip.key:ro
+      - "/opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro"
+      - "/opt/zulip-ssl/privkey.pem:/etc/ssl/private/zulip.key:ro"
     ulimits:
       nofile:
         soft: 1000000
