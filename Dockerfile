@@ -59,15 +59,16 @@ WORKDIR /home/zulip
 ARG ZULIP_GIT_URL=git@github.com:sg12/connectRM.git
 ARG ZULIP_GIT_REF=develop
 
-# Копируем SSH-ключ из хоста (добавьте его в директорию с Dockerfile)
+# Копируем SSH-ключ и настраиваем от root
 COPY id_ed25519 /home/zulip/.ssh/id_ed25519
-
-# Настраиваем SSH и клонируем
 RUN mkdir -p /home/zulip/.ssh && \
     chmod 700 /home/zulip/.ssh && \
     chmod 600 /home/zulip/.ssh/id_ed25519 && \
     ssh-keyscan github.com >> /home/zulip/.ssh/known_hosts && \
-    git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
+    chown -R zulip:zulip /home/zulip/.ssh
+
+# Переключаемся на пользователя zulip
+USER zulip
 
 
 WORKDIR /home/zulip/zulip
