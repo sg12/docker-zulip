@@ -33,13 +33,16 @@ WORKDIR /home/zulip
 ARG ZULIP_GIT_URL=git@github.com:sg12/connectRM.git
 ARG ZULIP_GIT_REF=develop
 
-# Копируем SSH-ключ и настраиваем от root
+# Копируем SSH-ключ и создаём обёртку для git
 COPY id_ed25519 /home/zulip/.ssh/id_ed25519
 RUN mkdir -p /home/zulip/.ssh && \
     chmod 700 /home/zulip/.ssh && \
     chmod 600 /home/zulip/.ssh/id_ed25519 && \
     chown -R zulip:zulip /home/zulip/.ssh && \
-    GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no" git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
+    echo '#!/bin/sh' > /home/zulip/git-ssh.sh && \
+    echo 'exec ssh -i /home/zulip/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "$@"' >> /home/zulip/git-ssh.sh && \
+    chmod +x /home/zulip/git-ssh.sh && \
+    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
 
 # Переключаемся на пользователя zulip
 USER zulip
