@@ -42,7 +42,8 @@ RUN mkdir -p /home/zulip/.ssh && \
     echo '#!/bin/sh' > /home/zulip/git-ssh.sh && \
     echo 'exec ssh -i /home/zulip/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "$@"' >> /home/zulip/git-ssh.sh && \
     chmod +x /home/zulip/git-ssh.sh && \
-    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip
+    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip && \
+    chown -R zulip:zulip /home/zulip/zulip  # Исправляем права после git clone
 
 # Переключаемся на пользователя zulip
 USER zulip
