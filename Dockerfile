@@ -1,4 +1,4 @@
-# This is a 2-stage Docker build.  In the first stage, we build a
+# This is a 2-stage Docker build. In the first stage, we build a
 # Zulip development environment image and use
 # tools/build-release-tarball to generate a production release tarball
 # from the provided Git ref.
@@ -15,45 +15,51 @@ RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/
     DEBIAN_FRONTEND=noninteractive \
     apt-get -q install --no-install-recommends -y \
     ca-certificates git locales python3 sudo tzdata \
-    curl nodejs npm && \
+    curl nodejs npm openssh-client && \
     npm install -g corepack && \
     corepack enable && \
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
     useradd -d /home/zulip -m zulip -u 1000
 
-#RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/ubuntu/\? |$UBUNTU_MIRROR |" /etc/apt/sources.list; } && \
-#    apt-get -q update && \
-#    apt-get -q dist-upgrade -y && \
-#    DEBIAN_FRONTEND=noninteractive \
-#    apt-get -q install --no-install-recommends -y ca-certificates git locales python3 sudo tzdata && \
-#    touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
-#    useradd -d /home/zulip -m zulip -u 1000
-
-RUN corepack prepare pnpm@9.14.2 --activate #1---
+RUN corepack prepare pnpm@9.14.2 --activate
 
 FROM base AS build
 
 RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER zulip
 WORKDIR /home/zulip
 
-# You can specify these in docker-compose.yml or with
-#   docker build --build-arg "ZULIP_GIT_REF=git_branch_name" .
-ARG ZULIP_GIT_URL=https://github.com/sg12/zulip.git
-ARG ZULIP_GIT_REF=9.3
-# ARG ZULIP_GIT_REF=main
+# Указываем SSH URL и ветку
+ARG ZULIP_GIT_URL=git@github.com:sg12/connectRM.git
+ARG ZULIP_GIT_REF=main
 
-# RUN git clone "$ZULIP_GIT_URL"
-RUN git clone --branch main https://github.com/sg12/zulip.git
+# Копируем SSH-ключ и создаём обёртку для git
+COPY id_ed25519 /home/zulip/.ssh/id_ed25519
+RUN mkdir -p /home/zulip/.ssh && \
+    chmod 700 /home/zulip/.ssh && \
+    chmod 600 /home/zulip/.ssh/id_ed25519 && \
+    chown -R zulip:zulip /home/zulip/.ssh && \
+    echo '#!/bin/sh' > /home/zulip/git-ssh.sh && \
+    echo 'exec ssh -i /home/zulip/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "$@"' >> /home/zulip/git-ssh.sh && \
+    chmod +x /home/zulip/git-ssh.sh && \
+    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip && \
+    chown -R zulip:zulip /home/zulip/zulip  # Исправляем права после git clone
+
+# Переключаемся на пользователя zulip
+USER zulip
 
 WORKDIR /home/zulip/zulip
 
 ARG CUSTOM_CA_CERTIFICATES
 
-RUN corepack prepare pnpm@9.14.2 --activate #2---
+RUN corepack prepare pnpm@9.14.2 --activate
 
-RUN pnpm install --frozen-lockfile --prefer-offline #3---
+RUN pnpm install --frozen-lockfile --prefer-offline
+
+RUN rm -rf node_modules/.cache
+
+# Отладка: проверяем ветку
+RUN git branch --show-current > /tmp/git_branch_check.txt
 
 # Finally, we provision the development environment and build a release tarball
 RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
@@ -62,7 +68,6 @@ RUN . /srv/zulip-py3-venv/bin/activate && \
     ./tools/build-release-tarball docker && \
     mv /tmp/tmp.*/zulip-server-docker.tar.gz /tmp/zulip-server-docker.tar.gz
 
-
 # In the second stage, we build the production image from the release tarball
 FROM base
 
@@ -70,6 +75,7 @@ ENV DATA_DIR="/data"
 
 # Then, with a second image, we install the production release tarball.
 COPY --from=build /tmp/zulip-server-docker.tar.gz /root/
+COPY --from=build /tmp/git_branch_check.txt /root/
 COPY custom_zulip_files/ /root/custom_zulip
 
 ARG CUSTOM_CA_CERTIFICATES
