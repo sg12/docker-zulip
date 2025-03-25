@@ -38,7 +38,7 @@ RUN mkdir -p /home/zulip/.ssh && \
     echo '#!/bin/sh' > /home/zulip/git-ssh.sh && \
     echo 'exec ssh -i /home/zulip/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "$@"' >> /home/zulip/git-ssh.sh && \
     chmod +x /home/zulip/git-ssh.sh && \
-    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "main" "git@github.com:sg12/docker-zulip.git" zulip && \
+    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "main" "git@github.com:sg12/connectRM.git" zulip && \
     chown -R zulip:zulip /home/zulip/zulip  # Исправляем права после git clone
 
 # Переключаемся на пользователя zulip
