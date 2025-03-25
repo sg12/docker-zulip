@@ -29,10 +29,6 @@ RUN echo 'zulip ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 WORKDIR /home/zulip
 
-# Указываем SSH URL и ветку
-ARG ZULIP_GIT_URL=git@github.com:sg12/connectRM.git
-ARG ZULIP_GIT_REF=main
-
 # Копируем SSH-ключ и создаём обёртку для git
 COPY id_ed25519 /home/zulip/.ssh/id_ed25519
 RUN mkdir -p /home/zulip/.ssh && \
@@ -42,7 +38,7 @@ RUN mkdir -p /home/zulip/.ssh && \
     echo '#!/bin/sh' > /home/zulip/git-ssh.sh && \
     echo 'exec ssh -i /home/zulip/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no "$@"' >> /home/zulip/git-ssh.sh && \
     chmod +x /home/zulip/git-ssh.sh && \
-    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "$ZULIP_GIT_REF" "$ZULIP_GIT_URL" zulip && \
+    GIT_SSH=/home/zulip/git-ssh.sh git clone --branch "main" "git@github.com:sg12/docker-zulip.git" zulip && \
     chown -R zulip:zulip /home/zulip/zulip  # Исправляем права после git clone
 
 # Переключаемся на пользователя zulip
