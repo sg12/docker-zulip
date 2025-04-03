@@ -53,6 +53,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    env_file:
+      - .env
     environment:
       DB_HOST: ${DB_HOST}
       DB_HOST_PORT: ${DB_HOST_PORT}
