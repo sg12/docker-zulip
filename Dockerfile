@@ -120,7 +120,7 @@ ARG UBUNTU_MIRROR
 
 # Replace all occurrences of archive.ubuntu.com and security.ubuntu.com in sources.list
 RUN if [ -n "$UBUNTU_MIRROR" ]; then \
-      sed -i "s|http://\(archive\|security\)\.ubuntu\.com/ubuntu/|$UBUNTU_MIRROR/|g" /etc/apt/sources.list; \
+      sed -i "s|http://archive\.ubuntu\.com/ubuntu/|$UBUNTU_MIRROR/|g" /etc/apt/sources.list; \
     fi && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
