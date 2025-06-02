@@ -117,14 +117,10 @@ FROM ubuntu:24.04 AS base
 # Set up working locales and upgrade the base image
 ENV LANG="C.UTF-8"
 
-# Задаём зеркало mirror.yandex.ru и добавляем репозиторий PGroonga
-RUN apt-get -q update && \
-    apt-get -q install -y --no-install-recommends curl gnupg2 && \
-    echo "deb http://mirror.yandex.ru/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
+# Задаём зеркало mirror.yandex.ru
+RUN echo "deb http://mirror.yandex.ru/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb http://mirror.yandex.ru/ubuntu/ noble-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://mirror.yandex.ru/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
-    echo "deb http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main" >> /etc/apt/sources.list.d/pgdg.list && \
-    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/pgdg.gpg && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
@@ -136,7 +132,7 @@ RUN apt-get -q update && \
         libgtk-3-0 libldap2-dev libmagic1 libpq-dev libsasl2-dev libssl-dev \
         libvips libvips-tools libx11-xcb1 libxcb-dri3-0 libxml2-dev \
         libxmlsec1-dev libxslt1-dev libxss1 libyaml-dev memcached moreutils \
-        pkg-config postgresql-16 postgresql-16-pgroonga puppet puppet-lint \
+        pkg-config postgresql-16 puppet puppet-lint \
         python3-dev python3-pip rabbitmq-server redis-server supervisor unzip \
         virtualenv xdg-utils xvfb && \
     npm install -g corepack && \
