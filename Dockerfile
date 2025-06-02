@@ -119,12 +119,12 @@ ENV LANG="C.UTF-8"
 
 # Задаём зеркало mirror.yandex.ru и добавляем репозиторий PGroonga
 RUN apt-get -q update && \
-    apt-get -q install -y --no-install-recommends wget gnupg2 && \
+    apt-get -q install -y --no-install-recommends curl gnupg2 && \
     echo "deb http://mirror.yandex.ru/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
     echo "deb http://mirror.yandex.ru/ubuntu/ noble-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://mirror.yandex.ru/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
     echo "deb http://apt.postgresql.org/pub/repos/apt/ noble-pgdg main" >> /etc/apt/sources.list.d/pgdg.list && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/pgdg.gpg && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/pgdg.gpg && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
