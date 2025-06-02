@@ -111,29 +111,37 @@
 # Zulip development environment image and use
 # tools/build-release-tarball to generate a production release tarball
 # from the provided Git ref.
+
+
 FROM ubuntu:24.04 AS base
 
 # Set up working locales and upgrade the base image
 ENV LANG="C.UTF-8"
 
-ARG UBUNTU_MIRROR
-
-# Replace all occurrences of archive.ubuntu.com and security.ubuntu.com in sources.list
-RUN if [ -n "$UBUNTU_MIRROR" ]; then \
-      sed -i "s|http://archive\.ubuntu\.com/ubuntu/|$UBUNTU_MIRROR/|g" /etc/apt/sources.list; \
-    fi && \
+# Задаём зеркало mirror.yandex.ru для избежания 403 Forbidden
+RUN sed -i 's|http://archive\.ubuntu\.com/ubuntu/|http://mirror.yandex.ru/ubuntu/|g' /etc/apt/sources.list && \
+    sed -i 's|http://security\.ubuntu\.com/ubuntu/|http://mirror.yandex.ru/ubuntu/|g' /etc/apt/sources.list && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -q install --no-install-recommends -y \
         ca-certificates git locales python3 sudo tzdata \
-        curl nodejs npm openssh-client && \
+        curl nodejs npm openssh-client \
+        build-essential crudini default-jre-headless fonts-freefont-ttf \
+        gettext hunspell-en-us jq libatk-bridge2.0-0 libffi-dev libgbm1 \
+        libgtk-3-0 libldap2-dev libmagic1 libpq-dev libsasl2-dev libssl-dev \
+        libvips libvips-tools libx11-xcb1 libxcb-dri3-0 libxml2-dev \
+        libxmlsec1-dev libxslt1-dev libxss1 libyaml-dev memcached moreutils \
+        pkg-config postgresql-16 postgresql-16-pgroonga puppet puppet-lint \
+        python3-dev python3-pip rabbitmq-server redis-server supervisor unzip \
+        virtualenv xdg-utils xvfb && \
     npm install -g corepack && \
     corepack enable && \
     touch /var/mail/ubuntu && \
     chown ubuntu /var/mail/ubuntu && \
     userdel -r ubuntu && \
-    useradd -d /home/zulip -m zulip -u 1000
+    useradd -d /home/zulip -m zulip -u 1000 && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN corepack prepare pnpm@9.14.2 --activate
 
@@ -175,7 +183,7 @@ RUN rm -rf node_modules/.cache
 # Отладка: проверяем ветку
 RUN git branch --show-current > /tmp/git_branch_check.txt
 
-# Finally, we provision the development environment and build a release tarball
+# Выполняем provision с предварительной установкой всех пакетов
 RUN SKIP_VENV_SHELL_WARNING=1 ./tools/provision --build-release-tarball-only
 
 RUN . /srv/zulip-py3-venv/bin/activate && \
