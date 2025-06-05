@@ -9,17 +9,31 @@ ENV LANG="C.UTF-8"
 
 ARG UBUNTU_MIRROR
 
-RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/ubuntu/\? |$UBUNTU_MIRROR |" /etc/apt/sources.list; } && \
+# RUN { [ ! "$UBUNTU_MIRROR" ] || sed -i "s|http://\(\w*\.\)*archive\.ubuntu\.com/ubuntu/\? |$UBUNTU_MIRROR |" /etc/apt/sources.list; } && \
+#     apt-get -q update && \
+#     apt-get -q dist-upgrade -y && \
+#     DEBIAN_FRONTEND=noninteractive \
+#     apt-get -q install --no-install-recommends -y \
+#     ca-certificates git locales python3 sudo tzdata \
+#     curl nodejs npm openssh-client && \
+#     npm install -g corepack && \
+#     corepack enable && \
+#     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
+#     useradd -d /home/zulip -m zulip -u 1000
+RUN echo "deb http://mirror.yandex.ru/ubuntu/ noble main restricted universe multiverse" > /etc/apt/sources.list && \
+    echo "deb http://mirror.yandex.ru/ubuntu/ noble-updates main restricted universe multiverse" >> /etc/apt/sources.list && \
+    echo "deb http://mirror.yandex.ru/ubuntu/ noble-security main restricted universe multiverse" >> /etc/apt/sources.list && \
     apt-get -q update && \
     apt-get -q dist-upgrade -y && \
     DEBIAN_FRONTEND=noninteractive \
     apt-get -q install --no-install-recommends -y \
-    ca-certificates git locales python3 sudo tzdata \
-    curl nodejs npm openssh-client && \
+        ca-certificates git locales python3 sudo tzdata \
+        curl nodejs npm openssh-client && \
     npm install -g corepack && \
     corepack enable && \
     touch /var/mail/ubuntu && chown ubuntu /var/mail/ubuntu && userdel -r ubuntu && \
-    useradd -d /home/zulip -m zulip -u 1000
+    useradd -d /home/zulip -m zulip -u 1000 && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN corepack prepare pnpm@9.14.2 --activate
 
