@@ -84,6 +84,9 @@ services:
       ZULIP_SSL_KEY: ${ZULIP_SSL_KEY}
       YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID}
       YANDEX_API_KEY: ${YANDEX_API_KEY}
+      SETTING_RUSTORE_ENABLED: ${RUSTORE_ENABLED}
+      SETTING_RUSTORE_PROJECT_ID: ${RUSTORE_PROJECT_ID}
+      SETTING_RUSTORE_AUTH_TOKEN: ${RUSTORE_AUTH_TOKEN}
     volumes:
       - "zulip:/data:rw"
       - "/opt/zulip-ssl/fullchain.pem:/etc/ssl/certs/zulip.combined-chain.crt:ro"
